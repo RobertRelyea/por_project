@@ -1,0 +1,2 @@
+- setup-file:
+    local-name: /home/imhs/principles/project/catkin_ws/devel/setup.sh
