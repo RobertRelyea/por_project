@@ -59,6 +59,9 @@ def apf():
     while(not rospy.is_shutdown()):
         vel_msg = Twist()
 
+        ## TODO: Improve forward bias/rear obstacle detection so we don't rocket
+        ##       Normalize vel commands to make it less jumpy around lots of hits?
+
         # Determine linear motion required
         x = net_force[0] / 10
         if x > 0.2:
