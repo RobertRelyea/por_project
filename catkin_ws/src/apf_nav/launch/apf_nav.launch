@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<launch>
+
+    <!-- Usage: roslaunch omni_blob omni_blob.launch -->
+
+    <!-- Launch YDLiDAR LaserScan Publisher -->
+    <include file="$(find ydlidar)/launch/lidar.launch"/>
+
+    <node name="apf_nav" pkg="apf_nav" type="apf.py"/>
+
+</launch>

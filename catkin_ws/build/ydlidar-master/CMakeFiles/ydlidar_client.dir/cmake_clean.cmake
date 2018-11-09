@@ -1,7 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/ydlidar_client.dir/src/ydlidar_client.cpp.o"
-  "/home/imhs/principles/project/catkin_ws/devel/lib/ydlidar/ydlidar_client.pdb"
-  "/home/imhs/principles/project/catkin_ws/devel/lib/ydlidar/ydlidar_client"
+  "/home/nvidia/principles/project/catkin_ws/devel/lib/ydlidar/ydlidar_client.pdb"
+  "/home/nvidia/principles/project/catkin_ws/devel/lib/ydlidar/ydlidar_client"
 )
 
 # Per-language clean rules from dependency scanning.

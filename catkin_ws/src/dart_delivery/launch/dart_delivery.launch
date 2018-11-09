@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<launch>
+
+    <!-- Usage: roslaunch dart_delivery dart_delivery.launch -->
+
+    <!-- Arguments -->
+
+    <!-- Drivers -->
+    <!-- Launch robot platform communications -->
+
+    <!-- Launch Omniblob blob detector -->
+    <include file="$(find omni_blob)/launch/omni_blob.launch"/>
+
+    <!-- Launch Artificial Potential Field navigation -->
+    <include file="$(find apf_nav)/launch/apf_nav.launch"/>
+
+</launch>

@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<launch>
+
+    <!-- Usage: roslaunch omni_blob omni_blob.launch -->
+
+    <!-- Launch usb_cam node for reading omnivision frames -->
+    <node pkg="usb_cam" type="usb_cam_node" name="omnivision">
+        <param name="video_device" value="/dev/video1"/>
+        <param name="image_height" value="1440"/>
+        <param name="image_width" value="1440"/>
+        <param name="frame_rate" value="15"/>
+        <!-- <param name="camera_name" value="omnivision"/> -->
+    </node>
+
+    <node name="omni_blob" pkg="omni_blob" type="omni_blob.py"/>
+
+    <!-- <node pkg="nodelet" type="nodelet" name="standalone_nodelet" args="manager"/>
+
+    <node pkg="nodelet" type="nodelet" name="resize"
+        args="load image_proc/resize standalone_nodelet">
+        <remap from="/image" to="/omnivision/image_raw"/>
+        <remap from="/camera_info" to="/omnivision/camera_info"/>
+        <param name="use_scale" value="False"/>
+        <param name="width" type="int" value="360"/>
+        <param name="height" type="int" value="360"/>
+    </node> -->
+
+
+</launch>

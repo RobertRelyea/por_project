@@ -43,10 +43,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/imhs/principles/project/catkin_ws/src
+CMAKE_SOURCE_DIR = /home/nvidia/principles/project/catkin_ws/src
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/imhs/principles/project/catkin_ws/build
+CMAKE_BINARY_DIR = /home/nvidia/principles/project/catkin_ws/build
 
 # Utility rule file for sensor_msgs_generate_messages_eus.
 
@@ -63,10 +63,10 @@ ydlidar-master/CMakeFiles/sensor_msgs_generate_messages_eus.dir/build: sensor_ms
 .PHONY : ydlidar-master/CMakeFiles/sensor_msgs_generate_messages_eus.dir/build
 
 ydlidar-master/CMakeFiles/sensor_msgs_generate_messages_eus.dir/clean:
-	cd /home/imhs/principles/project/catkin_ws/build/ydlidar-master && $(CMAKE_COMMAND) -P CMakeFiles/sensor_msgs_generate_messages_eus.dir/cmake_clean.cmake
+	cd /home/nvidia/principles/project/catkin_ws/build/ydlidar-master && $(CMAKE_COMMAND) -P CMakeFiles/sensor_msgs_generate_messages_eus.dir/cmake_clean.cmake
 .PHONY : ydlidar-master/CMakeFiles/sensor_msgs_generate_messages_eus.dir/clean
 
 ydlidar-master/CMakeFiles/sensor_msgs_generate_messages_eus.dir/depend:
-	cd /home/imhs/principles/project/catkin_ws/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/imhs/principles/project/catkin_ws/src /home/imhs/principles/project/catkin_ws/src/ydlidar-master /home/imhs/principles/project/catkin_ws/build /home/imhs/principles/project/catkin_ws/build/ydlidar-master /home/imhs/principles/project/catkin_ws/build/ydlidar-master/CMakeFiles/sensor_msgs_generate_messages_eus.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/nvidia/principles/project/catkin_ws/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/nvidia/principles/project/catkin_ws/src /home/nvidia/principles/project/catkin_ws/src/ydlidar-master /home/nvidia/principles/project/catkin_ws/build /home/nvidia/principles/project/catkin_ws/build/ydlidar-master /home/nvidia/principles/project/catkin_ws/build/ydlidar-master/CMakeFiles/sensor_msgs_generate_messages_eus.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : ydlidar-master/CMakeFiles/sensor_msgs_generate_messages_eus.dir/depend
 
