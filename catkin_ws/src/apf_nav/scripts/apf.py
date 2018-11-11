@@ -53,7 +53,7 @@ def apf():
     # Starts a new node
     rospy.init_node('apf_nav', anonymous=True)
     rospy.Subscriber('/scan', LaserScan, laserscanCB)
-    velocity_publisher = rospy.Publisher('/cmd_vel', Twist, queue_size=10)
+    velocity_publisher = rospy.Publisher('/cmd_vel_apf', Twist, queue_size=10)
 
     r = rospy.Rate(100)
     while(not rospy.is_shutdown()):
@@ -81,7 +81,7 @@ def apf():
 
 
         velocity_publisher.publish(vel_msg)
-        print(net_force)    
+        print(net_force)
         r.sleep()
 
     # Stop the bot

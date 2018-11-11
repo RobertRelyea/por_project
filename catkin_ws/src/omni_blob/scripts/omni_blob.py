@@ -6,13 +6,14 @@ import pdb
 import math
 import rospy
 from cv_bridge import CvBridge, CvBridgeError
-from geometry_msgs.msg import Twist
+from std_msgs.msg import Float32
 from sensor_msgs.msg import Image
 
 # ROS Image
 omnivisionImage = np.array([])
 bridge = CvBridge()
-blob_publisher = {}
+blob_pub = {}
+angle_pub = {}
 
 # Blob detector parameters
 detectorParams = cv2.SimpleBlobDetector_Params()
@@ -47,7 +48,7 @@ redUpper = (17, 220, 220)
 
 
 def getAngle():
-    global omnivisionImage
+    global omnivisionImage, blob_pub, angle_pub
     angle = 0
 
     if omnivisionImage.shape[0] == 0:
@@ -73,57 +74,49 @@ def getAngle():
     	y = keypoints[0].pt[1] - 300
     	x = keypoints[0].pt[0] - 300
     	angle = math.atan2(y, x)
-    # print(hsv[300,300])
+        # print(hsv[300,300])
 
-    # Draw detected blobs as red circles.
-    # cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS ensures the size of the circle corresponds to the size of blob
-    im_with_keypoints = cv2.drawKeypoints(frame, keypoints, np.array([]), (255,0,0), cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
+        # Draw detected blobs as red circles.
+        # cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS ensures the size of the circle
+        # corresponds to the size of blob
+        im_with_keypoints = cv2.drawKeypoints(frame, keypoints, np.array([]),
+                              (255,0,0), cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
 
-    # Show keypoints
-    # cv2.imshow("Mask", mask)
-    # cv2.imshow("Keypoints", im_with_keypoints)
-    # cv2.waitKey(1)
+        # Show keypoints
+        # cv2.imshow("Mask", mask)
+        # cv2.imshow("Keypoints", im_with_keypoints)
+        # cv2.waitKey(1)
 
-    # Publish the image with keypoints
-    blobImage = bridge.cv2_to_imgmsg(im_with_keypoints, "bgr8")
-    blob_publisher.publish(blobImage)
-    return angle
+        # Publish the image with keypoints
+        blobImage = bridge.cv2_to_imgmsg(im_with_keypoints, "bgr8")
+        blob_pub.publish(blobImage)
+        angle_pub.publish(angle)
 
 # Handles new omnivision image data.
 def omnivisionCB(data):
     global omnivisionImage
     try:
-        omnivisionImage = bridge.imgmsg_to_cv2(data, "bgr8")
+        omnivisionImage = cv2.flip(bridge.imgmsg_to_cv2(data, "bgr8"), 1)
+        # omnivisionImage = bridge.imgmsg_to_cv2(data, "bgr8")
+        # getAngle()
     except CvBridgeError, e:
         rospy.logerr(e)
 
-def turret():
-    global blob_publisher
+def omni_blob():
+    global blob_pub, angle_pub
     # Starts a new node
-    rospy.init_node('robot_cleaner', anonymous=True)
-    blob_publisher = rospy.Publisher('omnivision/image_blob', Image)
-    velocity_publisher = rospy.Publisher('cmd_vel', Twist, queue_size=10)
+    rospy.init_node('omni_blob', anonymous=True)
+    blob_pub = rospy.Publisher('omnivision/image_blob', Image, queue_size=10)
+    angle_pub = rospy.Publisher('omnivision/blob_angle', Float32, queue_size=10)
     rospy.Subscriber('omnivision/image_raw', Image, omnivisionCB)
 
-    r = rospy.Rate(15)
+    rate = rospy.Rate(15)
     while(not rospy.is_shutdown()):
-        angle = getAngle()
-    	z = angle * 2
-    	if z > 0.5:
-    		z = 0.5
-    	elif z < -0.5:
-    		z = -0.5
-
-        vel_msg = Twist()
-    	vel_msg.angular.z = z
-    	velocity_publisher.publish(vel_msg)
-
-    # Stop the bot
-    vel_msg = Twist()
-    velocity_publisher.publish(vel_msg)
+        getAngle()
+        rate.sleep()
 
 if __name__ == '__main__':
     try:
         #Testing our function
-        turret()
+        omni_blob()
     except rospy.ROSInterruptException: pass

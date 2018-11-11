@@ -14,4 +14,7 @@
     <!-- Launch Artificial Potential Field navigation -->
     <include file="$(find apf_nav)/launch/apf_nav.launch"/>
 
+    <!-- Launch robot control script -->
+    <node name="dart_delivery" pkg="dart_delivery" type="robot_control.py"/>
+
 </launch>
