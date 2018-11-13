@@ -5,32 +5,40 @@
 #include <SoftwareSerial.h>
 #include <SabertoothSimplified.h>
 
+#include <ros.h>
+#include <geometry_msgs/Twist.h>
+
 SoftwareSerial SWSerial(12, 11); // RX on no pin (unused), TX on pin 11 (to S1).
 SabertoothSimplified ST(SWSerial); // Use SWSerial as the serial port.
+
+ros::NodeHandle nh;
+
+void cmdVelCB(const geometry_msgs::Twist& cmd_vel_msg)
+{
+
+  float linear_vel = cmd_vel_msg.linear.x * 50;
+  float angular_vel = cmd_vel_msg.angular.z * 50;
+
+  float right_motor_value = linear_vel - angular_vel;
+  float left_motor_value = linear_vel + angular_vel;
+  
+  ST.motor(1, right_motor_value);
+  ST.motor(2, left_motor_value);
+  
+}
+
+ros::Subscriber<geometry_msgs::Twist> cmd_vel_sub("/cmd_vel", &cmdVelCB);
 
 void setup()
 {
   SWSerial.begin(9600);
-  Serial.begin(9600);
-  Serial2.begin(9600); 
+  nh.initNode();
+  nh.subscribe(cmd_vel_sub);
 }
 
 void loop()
 {
-  int powe;
-  
-  // Ramp from -127 to 127 (full reverse to full forward), waiting 20 ms (1/50th of a second) per value.
-  for (powe = -127; powe <= 127; powe ++)
-  {
-    ST.motor(1, powe);
-    delay(20);
-  }
-  
-  // Now go back the way we came.
-  for (powe = 127; powe >= -127; powe --)
-  {
-    ST.motor(1, powe);
-    delay(20);
-  }
+  nh.spinOnce();
+  delay(1);
 }
 
