@@ -7,6 +7,7 @@
 
     <!-- Drivers -->
     <!-- Launch robot platform communications -->
+    <include file="$(find dart_delivery)/launch/platform_bringup.launch"/>
 
     <!-- Launch Omniblob blob detector -->
     <include file="$(find omni_blob)/launch/omni_blob.launch"/>

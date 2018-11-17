@@ -4,7 +4,7 @@
     <!-- Usage: roslaunch omni_blob omni_blob.launch -->
 
     <!-- Launch usb_cam node for reading omnivision frames -->
-    <node pkg="usb_cam" type="usb_cam_node" name="omnivision">
+    <node pkg="usb_cam" type="usb_cam_node" name="omnivision_principles">
         <param name="video_device" value="/dev/video1"/>
         <param name="image_height" value="1440"/>
         <param name="image_width" value="1440"/>

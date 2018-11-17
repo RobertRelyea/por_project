@@ -106,9 +106,9 @@ def omni_blob():
     global blob_pub, angle_pub
     # Starts a new node
     rospy.init_node('omni_blob', anonymous=True)
-    blob_pub = rospy.Publisher('omnivision/image_blob', Image, queue_size=10)
-    angle_pub = rospy.Publisher('omnivision/blob_angle', Float32, queue_size=10)
-    rospy.Subscriber('omnivision/image_raw', Image, omnivisionCB)
+    blob_pub = rospy.Publisher('omnivision_principles/image_blob', Image, queue_size=10)
+    angle_pub = rospy.Publisher('omnivision_principles/blob_angle', Float32, queue_size=10)
+    rospy.Subscriber('omnivision_principles/image_raw', Image, omnivisionCB)
 
     rate = rospy.Rate(15)
     while(not rospy.is_shutdown()):
