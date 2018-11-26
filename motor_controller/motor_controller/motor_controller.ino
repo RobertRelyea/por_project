@@ -19,19 +19,27 @@ void cmdVelCB(const geometry_msgs::Twist& cmd_vel_msg)
   float linear_vel = cmd_vel_msg.linear.x * 50;
   float angular_vel = cmd_vel_msg.angular.z * 50;
 
-  float right_motor_value = linear_vel - angular_vel;
-  float left_motor_value = linear_vel + angular_vel;
+  float right_motor_value = -linear_vel - angular_vel;
+  float left_motor_value = -linear_vel + angular_vel;
   
   ST.motor(1, right_motor_value);
   ST.motor(2, left_motor_value);
   
 }
 
+// Set up subscribers
 ros::Subscriber<geometry_msgs::Twist> cmd_vel_sub("/cmd_vel", &cmdVelCB);
 
 void setup()
 {
   SWSerial.begin(9600);
+  // For some reason, the first message to the sabertooth is bad,
+  // flush it with two to begin with.
+  ST.motor(1,0);
+  ST.motor(2,0);
+  delay(1); // Lets hope we don't break something
+  ST.motor(1,0);
+  ST.motor(2,0);
   nh.initNode();
   nh.subscribe(cmd_vel_sub);
 }
@@ -41,4 +49,3 @@ void loop()
   nh.spinOnce();
   delay(1);
 }
-
