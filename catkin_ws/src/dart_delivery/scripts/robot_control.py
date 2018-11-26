@@ -17,7 +17,7 @@ def apfCmdCB(data):
 def angleCB(data):
     global angle, angle_time
 
-    angle = data.data
+    angle = -data.data
     angle_time = rospy.get_time()
 
 def robot_control():
@@ -25,7 +25,7 @@ def robot_control():
     # Starts a new node
     rospy.init_node('robot_control', anonymous=True)
     rospy.Subscriber('cmd_vel_apf', Twist, apfCmdCB)
-    rospy.Subscriber('omnivision/blob_angle', Float32, angleCB)
+    rospy.Subscriber('omnivision_principles/blob_angle', Float32, angleCB)
     velocity_pub = rospy.Publisher('cmd_vel', Twist, queue_size=10)
 
     r = rospy.Rate(15)
