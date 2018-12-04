@@ -43,10 +43,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/nvidia/principles/project/catkin_ws/src
+CMAKE_SOURCE_DIR = /home/robert/principles/project/catkin_ws/src
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/nvidia/principles/project/catkin_ws/build
+CMAKE_BINARY_DIR = /home/robert/principles/project/catkin_ws/build
 
 # Utility rule file for rosgraph_msgs_generate_messages_cpp.
 
@@ -63,10 +63,10 @@ ydlidar-master/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/build: rosgrap
 .PHONY : ydlidar-master/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/build
 
 ydlidar-master/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/clean:
-	cd /home/nvidia/principles/project/catkin_ws/build/ydlidar-master && $(CMAKE_COMMAND) -P CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/cmake_clean.cmake
+	cd /home/robert/principles/project/catkin_ws/build/ydlidar-master && $(CMAKE_COMMAND) -P CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/cmake_clean.cmake
 .PHONY : ydlidar-master/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/clean
 
 ydlidar-master/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/depend:
-	cd /home/nvidia/principles/project/catkin_ws/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/nvidia/principles/project/catkin_ws/src /home/nvidia/principles/project/catkin_ws/src/ydlidar-master /home/nvidia/principles/project/catkin_ws/build /home/nvidia/principles/project/catkin_ws/build/ydlidar-master /home/nvidia/principles/project/catkin_ws/build/ydlidar-master/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/robert/principles/project/catkin_ws/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/robert/principles/project/catkin_ws/src /home/robert/principles/project/catkin_ws/src/ydlidar-master /home/robert/principles/project/catkin_ws/build /home/robert/principles/project/catkin_ws/build/ydlidar-master /home/robert/principles/project/catkin_ws/build/ydlidar-master/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : ydlidar-master/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/depend
 
