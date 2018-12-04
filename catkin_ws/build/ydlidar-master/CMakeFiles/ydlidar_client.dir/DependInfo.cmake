@@ -4,7 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/nvidia/principles/project/catkin_ws/src/ydlidar-master/src/ydlidar_client.cpp" "/home/nvidia/principles/project/catkin_ws/build/ydlidar-master/CMakeFiles/ydlidar_client.dir/src/ydlidar_client.cpp.o"
+  "/home/robert/principles/project/catkin_ws/src/ydlidar-master/src/ydlidar_client.cpp" "/home/robert/principles/project/catkin_ws/build/ydlidar-master/CMakeFiles/ydlidar_client.dir/src/ydlidar_client.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 
@@ -19,9 +19,9 @@ set(CMAKE_TARGET_DEFINITIONS_CXX
 set(CMAKE_CXX_TARGET_INCLUDE_PATH
   "/opt/ros/kinetic/include"
   "/opt/ros/kinetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp"
-  "/home/nvidia/principles/project/catkin_ws/src/ydlidar-master/src"
-  "/home/nvidia/principles/project/catkin_ws/src/ydlidar-master/sdk/include"
-  "/home/nvidia/principles/project/catkin_ws/src/ydlidar-master/sdk/src"
+  "/home/robert/principles/project/catkin_ws/src/ydlidar-master/src"
+  "/home/robert/principles/project/catkin_ws/src/ydlidar-master/sdk/include"
+  "/home/robert/principles/project/catkin_ws/src/ydlidar-master/sdk/src"
   )
 
 # Targets to which this target links.

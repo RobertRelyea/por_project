@@ -1,2 +1,2 @@
 apf_nav:dart_delivery:omni_blob:ydlidar-master
--DCATKIN_DEVEL_PREFIX=/home/nvidia/principles/project/catkin_ws/devel -DCMAKE_INSTALL_PREFIX=/home/nvidia/principles/project/catkin_ws/install -G Unix Makefiles
+-DCATKIN_DEVEL_PREFIX=/home/robert/principles/project/catkin_ws/devel -DCMAKE_INSTALL_PREFIX=/home/robert/principles/project/catkin_ws/install -G Unix Makefiles
