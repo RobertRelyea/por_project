@@ -6,6 +6,10 @@
     <!-- Arguments -->
 
     <!-- Drivers -->
+    
+    <!-- Joystick input -->
+    <node pkg="joy" type="joy_node" name="joy_node"/>
+
     <!-- Launch robot platform communications -->
     <include file="$(find dart_delivery)/launch/platform_bringup.launch"/>
 
