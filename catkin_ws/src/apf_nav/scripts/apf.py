@@ -7,6 +7,13 @@ from geometry_msgs.msg import Twist
 
 import pdb
 
+X_MAX = 0.4
+X_MIN = -0.4
+Z_MAX = 0.4
+Z_MIN = -0.4
+
+FORWARD_BIAS = 0.6
+
 # Variable to hold current net force on bot
 # Calculated from input laserscan
 net_force = [0, 0]
@@ -14,7 +21,7 @@ net_force = [0, 0]
 # Maximum obstacle distance to be used for apf calculation
 max_obs_dist = 5
 # Negative scaling factor for obstacle repulsive forces
-neg_scale = -0.02
+neg_scale = -1.0
 
 def laserscanCB(data):
     global net_force
@@ -47,7 +54,7 @@ def laserscanCB(data):
         # Increment angle
         angle_idx += 1
 
-    net_force = [net_x, net_y]
+    net_force = [net_x * 2, net_y * 2]
 
 def apf():
     # Starts a new node
@@ -63,20 +70,20 @@ def apf():
         ##       Normalize vel commands to make it less jumpy around lots of hits?
 
         # Determine linear motion required
-        x = net_force[0] / 10
-        if x > 0.2:
-            x = 0.2
-        elif x < -0.3:
-            x = -0.3
-        vel_msg.linear.x = x + 0.1
+        x = net_force[0] / 20  + FORWARD_BIAS
+        if x > X_MAX:
+            x = X_MAX
+        elif x < X_MIN:
+            x = X_MIN
+        vel_msg.linear.x = x
 
         # Determine angular motion required
 
-        z = net_force[1] / 5
-        if z > 0.4:
-            z = 0.4
-        elif z < -0.4:
-            z = -0.4
+        z = net_force[1] / 10
+        if z > Z_MAX:
+            z = Z_MAX
+        elif z < Z_MIN:
+            z = Z_MIN
         vel_msg.angular.z = z
 
 
