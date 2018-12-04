@@ -5,8 +5,14 @@
 #include <ros.h>
 #include <geometry_msgs/Twist.h>
 
+// Control loop frequency
+#define LOOP_FREQ (20)
+
+
 SoftwareSerial SWSerial(12, 11); // RX on no pin (unused), TX on pin 11 (to S1).
 SabertoothSimplified ST(SWSerial); // Use SWSerial as the serial port.
+
+
 
 
 // PID control for left track
@@ -16,8 +22,11 @@ double left_setpoint, right_input, right_output;
 PID right_PID(&right_input, &right_output, &right_setpoint, 0.01, 0.5, 0.0, DIRECT);
 PID left_PID(&left_input, &left_output, &left_setpoint, 0.01, 0.5, 0.0, DIRECT);
 
-int right_ticks_per_meter = 372;
-int left_ticks_per_meter = 361;
+int right_ticks_per_meter = 361;
+int left_ticks_per_meter = 372;
+
+double right_radius = 0.2177 * 4;
+double left_radius = 0.2224 * 4;
 
 long newpositionL =0;
 long newpositionR =0;
@@ -27,6 +36,7 @@ long oldtime = 0;
 long newtime = 0;
 long velL = 0;
 long velR = 0;
+double L = 0.508; // Axle Track
 
 #include <Encoder.h>
 #define ENCODER_USE_INTERRUPTS
@@ -40,14 +50,18 @@ ros::NodeHandle nh;
 void cmdVelCB(const geometry_msgs::Twist& cmd_vel_msg)
 {
 
-  float linear_vel = cmd_vel_msg.linear.x;
-  float angular_vel = cmd_vel_msg.angular.z;
+  double linear_vel = cmd_vel_msg.linear.x;
+  double angular_vel = cmd_vel_msg.angular.z;
 
-  float right_motor_value = -linear_vel - angular_vel;
-  float left_motor_value = -linear_vel + angular_vel;
+  // Differential drive kinematic equations
+  double v_left = linear_vel - ((L / 2) * angular_vel);
+  v_left /= left_radius;
+
+  double v_right = linear_vel + ((L / 2) * angular_vel);
+  v_right /= right_radius;
   
-  left_setpoint = linear_vel * left_ticks_per_meter;
-  right_setpoint = linear_vel * right_ticks_per_meter;
+  left_setpoint = v_left * left_ticks_per_meter;
+  right_setpoint = v_right * right_ticks_per_meter;
 }
 
 // Set up subscribers
@@ -71,11 +85,11 @@ void setup() {
 
   left_input = velL;
   left_PID.SetMode(AUTOMATIC);
-  left_PID.SetOutputLimits(-70.0, 70.0); // Limits
+  left_PID.SetOutputLimits(-127.0, 127.0); // Limits
   
   right_input = velR;
   right_PID.SetMode(AUTOMATIC);
-  right_PID.SetOutputLimits(-70.0, 70.0); // Limits
+  right_PID.SetOutputLimits(-127.0, 127.0); // Limits
   
   nh.initNode();
   nh.subscribe(cmd_vel_sub);
@@ -103,7 +117,7 @@ void loop() {
   ST.motor(2, (int)left_motor_val * -1);
   ST.motor(1, (int)right_motor_val * -1);
 
-  delay(50); // 20 Hz (ish) control loop
+  delay(1000 / LOOP_FREQ); // 20 Hz (ish) control loop
   oldpositionL = newpositionL;
   oldpositionR = newpositionR;
   oldtime = newtime;
