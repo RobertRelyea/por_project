@@ -12,7 +12,7 @@
         <!-- <param name="camera_name" value="omnivision"/> -->
     </node>
 
-    <!-- <node name="omni_blob" pkg="omni_blob" type="omni_blob.py"/> -->
+    <node name="omni_blob" pkg="omni_blob" type="omni_blob.py"/>
 
     <!-- <node pkg="nodelet" type="nodelet" name="standalone_nodelet" args="manager"/>
 

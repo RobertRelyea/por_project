@@ -9,6 +9,7 @@ from geometry_msgs.msg import Twist
 
 MAX_Z = 0.7
 MIN_Z = 0.4
+DEADZONE = 0.2
 
 angle = 0
 angle_time = 0
@@ -51,6 +52,10 @@ def robot_control():
             if rospy.get_time() - angle_time < 1.0 / 15.0:
                 apf_enable = False
                 z = (MIN_Z * np.sign(angle)) + angle * 2
+
+                if abs(z) < DEADZONE:
+                    z = 0
+                
                 if z > MAX_Z:
                     z = MAX_Z
                 elif z < -MAX_Z:
