@@ -19,8 +19,8 @@ SabertoothSimplified ST(SWSerial); // Use SWSerial as the serial port.
 double setpoint, right_setpoint, left_input, left_output;
 double left_setpoint, right_input, right_output;
 
-PID right_PID(&right_input, &right_output, &right_setpoint, 0.01, 0.5, 0.0, DIRECT);
-PID left_PID(&left_input, &left_output, &left_setpoint, 0.01, 0.5, 0.0, DIRECT);
+PID right_PID(&right_input, &right_output, &right_setpoint, 0.01, 0.5, 0.001, DIRECT);
+PID left_PID(&left_input, &left_output, &left_setpoint, 0.01, 0.5, 0.001, DIRECT);
 
 int right_ticks_per_meter = 361;
 int left_ticks_per_meter = 372;
@@ -39,7 +39,7 @@ long velR = 0;
 double L = 0.508; // Axle Track
 
 #include <Encoder.h>
-#define ENCODER_USE_INTERRUPTS
+#define ENCODER_USE_INTERRUPTS // Move this before encoder include
 
 Encoder knobLeft(7, 8);
 Encoder knobRight(9, 10);
@@ -124,3 +124,4 @@ void loop() {
 
   nh.spinOnce();
 }
+
