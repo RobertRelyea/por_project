@@ -1,0 +1,8 @@
+prefix=/home/robert/principles/project/catkin_ws/install
+
+Name: apf_nav
+Description: Description of apf_nav
+Version: 0.0.0
+Cflags: 
+Libs: -L/home/robert/principles/project/catkin_ws/install/lib 
+Requires: 

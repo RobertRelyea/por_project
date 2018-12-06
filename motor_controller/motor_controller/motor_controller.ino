@@ -8,10 +8,7 @@
 // ROS 
 #include <ros.h>
 #include <geometry_msgs/Twist.h>
-#include <std_msgs/Float32MultiArray.h>
-#include <std_msgs/MultiArrayDimension.h>
-#include <std_msgs/MultiArrayLayout.h>
-//#include <nav_msgs/Odometry.h>
+#include <dart_delivery/RosieOdom.h>
 
 // Quaternion conversion
 //#include "quaternion.h"
@@ -36,10 +33,10 @@ int right_ticks_per_meter = 361;
 int left_ticks_per_meter = 372;
 
 // Approximate "radii" for both tracks
-double right_radius = 0.2177 * 4;
-double left_radius = 0.2224 * 4;
+double right_radius = 0.2177 * 4.4;
+double left_radius = 0.2224 * 4.4;
 // Axle Track
-double L = 0.508; 
+double L = 0.508 * 1.25; 
 
 // Velocity calculation globals
 // Latest accumulated encoder tick position
@@ -55,11 +52,6 @@ long oldtime = 0;
 long velL = 0;
 long velR = 0;
 
-// Odometry globals
-float odom_x = 0.0;
-float odom_y = 0.0;
-float odom_th = 0.0;
-
 #include <Encoder.h>
 #define ENCODER_USE_INTERRUPTS // Move this before encoder include?
 
@@ -72,7 +64,7 @@ ros::NodeHandle nh;
 // cmd_vel callback function, sets PID target velocities
 void cmdVelCB(const geometry_msgs::Twist& cmd_vel_msg)
 {
-
+  // Extract relevant velocities from Twist
   double linear_vel = cmd_vel_msg.linear.x;
   double angular_vel = cmd_vel_msg.angular.z;
 
@@ -82,18 +74,16 @@ void cmdVelCB(const geometry_msgs::Twist& cmd_vel_msg)
 
   double v_right = linear_vel + ((L / 2) * angular_vel);
   v_right /= right_radius;
-  
+
+  // Update PID setpoints
   left_setpoint = v_left * left_ticks_per_meter;
   right_setpoint = v_right * right_ticks_per_meter;
 }
 
-// Set up subscribers
+// Set up subscribers and publishers
 ros::Subscriber<geometry_msgs::Twist> cmd_vel_sub("/cmd_vel", &cmdVelCB);
-// Set up publishers
-//nav_msgs::Odometry odom_msg;
-//ros::Publisher odom_pub("/odom", &odom_msg);
-std_msgs::Float32MultiArray track_vel_message;
-ros::Publisher track_vel_pub("/track_vel", &track_vel_message);
+dart_delivery::RosieOdom odom_msg;
+ros::Publisher odom_pub("/rosie_odom", &odom_msg);
 
 void setup() {
   // Sabertooth communications setup
@@ -120,71 +110,74 @@ void setup() {
   
   nh.initNode();
   nh.subscribe(cmd_vel_sub);
-//  nh.advertise(odom_pub);
-  nh.advertise(track_vel_pub);
+  nh.advertise(odom_pub);
 
 }
 
-float vel_data[] = {0, 0};
-std_msgs::MultiArrayDimension track_vel_dim;
-std_msgs::MultiArrayDimension track_vel_dims[] = {track_vel_dim};
-
 void loop() {
-  long newLeft, newRight;
+
+  /******           Encoder tick updates            ******/
+  // Read encoder tick counts
   newpositionL = knobLeft.read();
   newpositionR = knobRight.read();
+  // Calculate encoder tick velocities
   newtime = millis();
   velL = (newpositionL-oldpositionL) * 1000 /(newtime-oldtime);
   velR = (newpositionR-oldpositionR) * 1000 /(newtime-oldtime);
-  
+
+
+  /******           Velocity PID update            ******/
+  // Calculate left motor command
   int left_motor_val = 0;
   left_input = velL;
   left_PID.Compute();
   left_motor_val = left_output;
-  
+
+  // Calculate right motor command
   int right_motor_val = 0;
   right_input = velR;
   right_PID.Compute();
   right_motor_val = right_output;
-
+  
+//   Send new motor commands
   ST.motor(2, (int)left_motor_val * -1);
   ST.motor(1, (int)right_motor_val * -1);
 
+  /******           Odometry update            ******/
+  // Convert tick velocities to meter velocities
+  float velL_meters = (float)velL / ((float)left_ticks_per_meter);
+  float velR_meters = (float)velR / ((float)right_ticks_per_meter);
+
+  // Update velocities based on differential drive model
+  float vx = (((left_radius / 2.) * velL_meters) + (((right_radius / 2.) * velR_meters))) * cos(odom_msg.theta);
+  float vy = (((left_radius / 2.) * velL_meters) + (((right_radius / 2.) * velR_meters))) * sin(odom_msg.theta);
+  float vth = (1 / L) * ((velR_meters*right_radius) - (velL_meters*left_radius));
+  
+  // Compute odometry change
+  float dt = (newtime - oldtime) / 1000.0;
+  float delta_x = vx * dt;
+  float delta_y = vy * dt;
+  float delta_th = vth * dt;
+
+  // Populate RosieOdom message
+  odom_msg.x += delta_x;
+  odom_msg.y += delta_y;
+  odom_msg.theta += delta_th;
+
+  // Debug
+//  odom_msg.x = newpositionL;
+//  odom_msg.y = newpositionR;
+//  odom_msg.theta = vth;
+
+  // Update encoder information
   oldpositionL = newpositionL;
   oldpositionR = newpositionR;
   oldtime = newtime;
 
-  
+  // Publish new RosieOdom message
+  odom_pub.publish(&odom_msg);
 
-
-
-  track_vel_dim.label = "length";
-  track_vel_dim.size = 2;
-  track_vel_dim.stride = 0;
-
-  track_vel_message.layout.dim = track_vel_dims;
-  track_vel_message.layout.data_offset = 0;
-
-  float velL_meters = (float)velL / ((float)left_ticks_per_meter);
-  float velR_meters = (float)velR / ((float)right_ticks_per_meter);
-  vel_data[0] = velL_meters;
-  vel_data[1] = velR_meters;
-  track_vel_message.data = vel_data;
-
-  track_vel_pub.publish(&track_vel_message);
-
-//  Quaternion orientation = toQuaternion(odom_th,0,0);
-//
-//  odom_msg.child_frame_id = "base_link";
-//  odom_msg.pose.pose.position.x = 0;
-//  odom_msg.pose.pose.position.y = 0;
-//  odom_msg.pose.pose.position.z = 0;
-//  odom_msg.pose.pose.orientation.x = orientation.x;
-//  odom_msg.pose.pose.orientation.y = orientation.y;
-//  odom_msg.pose.pose.orientation.z = orientation.z;
-//  odom_msg.pose.pose.orientation.w = orientation.w;
-//  odom_pub.publish(&odom_msg);
-  
+  // Control loop delay
   delay(1000 / LOOP_FREQ); // LOOP_FREQ Hz (ish) control loop
   nh.spinOnce();
 }
