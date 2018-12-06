@@ -12,7 +12,7 @@ X_MIN = -0.4
 Z_MAX = 0.7
 Z_MIN = -0.7
 
-FORWARD_BIAS = 0.30
+FORWARD_BIAS = 0.25
 
 # Variable to hold current net force on bot
 # Calculated from input laserscan
@@ -21,7 +21,7 @@ net_force = [0, 0]
 # Maximum obstacle distance to be used for apf calculation
 max_obs_dist = 4
 # Negative scaling factor for obstacle repulsive forces
-neg_scale = -0.2
+neg_scale = -0.25
 
 def laserscanCB(data):
     global net_force
