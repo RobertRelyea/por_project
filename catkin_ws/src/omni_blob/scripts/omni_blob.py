@@ -135,7 +135,7 @@ def getAngle():
 def omnivisionCB(data):
     global omnivisionImage
     try:
-        omnivisionImage = cv2.flip(bridge.imgmsg_to_cv2(data, "bgr8"), 1)
+        omnivisionImage = bridge.imgmsg_to_cv2(data, "bgr8")#cv2.flip(cv2.flip(bridge.imgmsg_to_cv2(data, "bgr8"), 0),1)
     except CvBridgeError, e:
         rospy.logerr(e)
 
