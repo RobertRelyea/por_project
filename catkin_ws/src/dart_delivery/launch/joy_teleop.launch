@@ -1,21 +1,23 @@
 <?xml version="1.0"?>
 <launch>
 
-    <!-- Usage: roslaunch dart_delivery dart_delivery.launch -->
+  <!-- Usage: roslaunch dart_delivery dart_delivery.launch -->
 
-    <!-- Arguments -->
-    <arg name="cmd_vel" default="cmd_vel" />
-    <arg name="teleop_config" default="$(find dart_delivery)/config/joy_teleop_config.yaml"/>
+  <!-- Arguments -->
+  <arg name="cmd_vel" default="cmd_vel" />
+  <arg name="teleop_config" default="$(find dart_delivery)/config/joy_teleop_config.yaml"/>
 
-    <node pkg="joy" type="joy_node" name="joy_node"/>
+  <node pkg="joy" type="joy_node" name="joy_node"/>
 
-    <rosparam file="$(arg teleop_config)" command="load" />
-  	<node pkg="joy_teleop" type="joy_teleop.py" name="joy_teleop">
-    	<remap from="cmd_vel" to="$(arg cmd_vel)" />
-  	</node>
+  <rosparam file="$(arg teleop_config)" command="load" />
+	<node pkg="joy_teleop" type="joy_teleop.py" name="joy_teleop">
+  	<remap from="cmd_vel" to="$(arg cmd_vel)" />
+	</node>
 
-  	<group ns="torso_controller">
-    	<node pkg="joy_teleop" type="incrementer_server.py" name="incrementer"/>
+	<group ns="torso_controller">
+  	<node pkg="joy_teleop" type="incrementer_server.py" name="incrementer"/>
 	</group>
+
+  <node pkg="dart_delivery" type="joystick_trigger.py" name="joystick_trigger"/>
 
 </launch>

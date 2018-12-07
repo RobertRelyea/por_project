@@ -19,6 +19,9 @@
     <!-- Launch Artificial Potential Field navigation -->
     <include file="$(find apf_nav)/launch/apf_nav.launch"/>
 
+    <!-- Launch robot odometry script -->
+    <node name="rosie_odom_pub" pkg="dart_delivery" type="rosie_odom_pub.py"/>
+
     <!-- Launch robot control script -->
     <node name="dart_delivery" pkg="dart_delivery" type="robot_control.py"/>
 
