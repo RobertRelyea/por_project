@@ -1,6 +1,6 @@
 
-#define FLYWHEEL_PIN (4)
-#define FEEDER_PIN (3)
+#define FLYWHEEL_PIN (11)
+#define FEEDER_PIN (10)
 
 // ROS 
 #include <ros.h>
@@ -13,9 +13,11 @@ void triggerCB(const std_msgs::Int16& trigger_msg)
   digitalWrite(FLYWHEEL_PIN, HIGH);
   delay(75);
   digitalWrite(FEEDER_PIN, HIGH);
-  delay(35);
-  digitalWrite(FLYWHEEL_PIN, LOW);
+  delay(30);
   digitalWrite(FEEDER_PIN, LOW);
+  delay(20);
+  digitalWrite(FLYWHEEL_PIN, LOW);
+  
 }
 
 ros::Subscriber<std_msgs::Int16> trigger_sub("/nerf_trigger", &triggerCB);

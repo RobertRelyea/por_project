@@ -13,3 +13,11 @@ teleop:
         axis: 2
         target: angular.z
         scale: 0.7
+
+  nerf:
+    type: topic
+    message_type: std_msgs/Int16
+    topic_name: nerf_trigger
+    message_value:
+      target: data
+      value: 1

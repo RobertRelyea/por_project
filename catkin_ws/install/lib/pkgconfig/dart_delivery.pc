@@ -1,8 +1,0 @@
-prefix=/home/robert/principles/project/catkin_ws/install
-
-Name: dart_delivery
-Description: Description of dart_delivery
-Version: 0.0.0
-Cflags: -I/home/robert/principles/project/catkin_ws/install/include
-Libs: -L/home/robert/principles/project/catkin_ws/install/lib 
-Requires: rospy std_msgs message_runtime
