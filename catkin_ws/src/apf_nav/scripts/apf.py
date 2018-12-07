@@ -12,7 +12,7 @@ X_MIN = -0.4
 Z_MAX = 0.7
 Z_MIN = -0.7
 
-FORWARD_BIAS = 0.3
+FORWARD_BIAS = 0.6
 
 # Variable to hold current net force on bot
 # Calculated from input laserscan
@@ -22,6 +22,24 @@ net_force = [0, 0]
 max_obs_dist = 5
 # Negative scaling factor for obstacle repulsive forces
 neg_scale = -0.25
+
+# Receives a non-zero range value
+def forceMagnitude(range):
+    # Old method
+    #force = 0.5 * neg_scale * math.pow((1 / (range) - 1/max_obs_dist), 2)
+
+    # New method
+    if range > max_obs_dist:
+        clamped_range = max_obs_dist
+    else:
+        clamped_range = range
+
+    pi = 3.14159265359
+    force = math.tan(clamped_range/(max_obs_dist/2) + (max_obs_dist * pi / 2)) / 5
+
+    return force
+
+
 
 def laserscanCB(data):
     global net_force
@@ -43,7 +61,7 @@ def laserscanCB(data):
         force = 0
         # Define a repulsive force for the given distance
         if range_val != 0:
-            force = 0.5 * neg_scale * math.pow((1 / (range_val) - 1/max_obs_dist), 2)
+            force = forceMagnitude(range_val)
 
         # Compute x and y components of the repulsive force
         force_x = math.cos(angle) * force
@@ -88,7 +106,7 @@ def apf():
 
 
         velocity_publisher.publish(vel_msg)
-        print(net_force)
+        # print(net_force)
         r.sleep()
 
     # Stop the bot

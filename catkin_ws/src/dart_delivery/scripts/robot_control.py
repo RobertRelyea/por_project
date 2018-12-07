@@ -12,7 +12,7 @@ MIN_Z = 0
 DEADZONE = 0.2
 FIRING_ZONE = 0.2
 # Cooldown for nerf blaster in seconds
-NERF_COOLDOWN = 10
+NERF_COOLDOWN = 5
 
 angle = 99
 angle_time = 0
